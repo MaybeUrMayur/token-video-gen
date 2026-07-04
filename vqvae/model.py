@@ -45,25 +45,28 @@ class Encoder3D(nn.Module):
 class Decoder3D(nn.Module):
     def __init__(self, in_channels, hidden_dims, out_channels):
         super().__init__()
+        h_dims = hidden_dims[::-1]
+        
+        self.initial_conv = nn.Conv3d(in_channels, h_dims[0], kernel_size=3, padding=1)
+        
         self.res_blocks = nn.Sequential(
-            ResBlock3D(in_channels, in_channels),
-            ResBlock3D(in_channels, in_channels)
+            ResBlock3D(h_dims[0], h_dims[0]),
+            ResBlock3D(h_dims[0], h_dims[0])
         )
         
         modules = []
-        hidden_dims.reverse()
-        for i in range(len(hidden_dims) - 1):
+        for i in range(len(h_dims) - 1):
             modules.append(
                 nn.Sequential(
-                    nn.ConvTranspose3d(hidden_dims[i], hidden_dims[i+1], kernel_size=4, stride=2, padding=1),
-                    nn.BatchNorm3d(hidden_dims[i+1]),
+                    nn.ConvTranspose3d(h_dims[i], h_dims[i+1], kernel_size=4, stride=2, padding=1),
+                    nn.BatchNorm3d(h_dims[i+1]),
                     nn.ReLU()
                 )
             )
             
         modules.append(
             nn.Sequential(
-                nn.ConvTranspose3d(hidden_dims[-1], out_channels, kernel_size=4, stride=2, padding=1),
+                nn.ConvTranspose3d(h_dims[-1], out_channels, kernel_size=4, stride=2, padding=1),
                 nn.Tanh() # Assuming input normalized to [-1, 1]
             )
         )
@@ -71,6 +74,7 @@ class Decoder3D(nn.Module):
 
     def forward(self, x):
         # x: (B, C, T, H, W)
+        x = self.initial_conv(x)
         x = self.res_blocks(x)
         x = self.decoder(x)
         return x
