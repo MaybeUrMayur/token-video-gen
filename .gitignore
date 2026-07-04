@@ -1,0 +1,27 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# PyTorch and Data
+*.pt
+*.pth
+*.npy
+data/*.pt
+data/*.npy
+
+# Wandb
+wandb/
+
+# Outputs
+outputs/
+checkpoints/
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
