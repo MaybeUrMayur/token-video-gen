@@ -52,8 +52,8 @@ class MovingMNISTDataset(Dataset):
     def __getitem__(self, idx):
         clip = self.clips[idx] # (T, H, W)
         
-        # Add channel dim: (T, C, H, W)
-        clip = clip.unsqueeze(1)
+        # Add channel dim: (C, T, H, W) for Conv3D
+        clip = clip.unsqueeze(0)
         
         # Downsample if needed
         if self.resolution != 64: # Original is 64x64
