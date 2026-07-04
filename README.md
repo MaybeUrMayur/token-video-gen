@@ -83,7 +83,9 @@ python evaluate.py
 
 ## Results
 
-*(After running evaluate.py, the results grid will be saved here)*
-![Results Grid](outputs/results_grid.gif)
+Here are some fully generated video clips (sampled autoregressively from the Transformer from scratch and decoded by the VQ-VAE):
 
-Columns: **Real Clip** | **VQ-VAE Reconstruction** | **Transformer Generated (From Scratch)**
+![Generated Sample 0](assets/sample_0.gif)
+![Generated Sample 1](assets/sample_1.gif)
+
+*(Note: These are early results trained for only a few minutes on a small subset of Moving MNIST).*
